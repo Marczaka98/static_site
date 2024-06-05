@@ -33,12 +33,14 @@ class TestTextNode(unittest.TestCase):
         node4 = TextNode("This is a code node", "code", "https://www.boot.dev")
         node5 = TextNode("This is a link node", "link", "https://www.boot.dev")
         node6 = TextNode("This is an image node", "image", "https://www.boot.dev")
+        node7 = TextNode("This is an invalid node", "header", "https://www.boot.dev")
         print(node.text_note_to_html_node().to_html())
         print(node2.text_note_to_html_node().to_html())
         print(node3.text_note_to_html_node().to_html())
         print(node4.text_note_to_html_node().to_html())
         print(node5.text_note_to_html_node().to_html())
         print(node6.text_note_to_html_node().to_html())
+        print(node7.text_note_to_html_node().to_html())
 
 if __name__ == "__main__":
     unittest.main()
