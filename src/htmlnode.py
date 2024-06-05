@@ -1,5 +1,5 @@
 class HTMLNode:
-    def __init__(self, tag=None, value=None, children=None, props=None):
+    def __init__(self, value=None, tag=None, children=None, props=None):
         self.tag = tag
         self.value = value
         self.children = children
@@ -10,7 +10,7 @@ class HTMLNode:
     
     def props_to_html(self):
         if self.props is None:
-            return None
+            return
         attributes = ""
         for prop in self.props:
             attributes += f" {prop}={self.props[prop]}"
