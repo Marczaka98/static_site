@@ -1,4 +1,5 @@
 import re
+from htmlnode import *
 
 block_type_heading = "heading"
 block_type_code = "code"
@@ -33,3 +34,9 @@ def block_to_block_type(block):
                 return block_type_paragraph
         return block_type_olist
     return block_type_paragraph
+
+def heading_block_to_htmlnode(block, block_type):
+    heading_tag = f"h{block.count('#')}"
+    block_text = re.sub(r"^\#{1,6} ", '', block)
+    return(HTMLNode(heading_tag, block_text))
+    
