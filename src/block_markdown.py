@@ -46,7 +46,7 @@ def markdown_to_html_node(markdown):
             continue
         else:
             raise ValueError(f"Invalid block type: {block_type}")
-    return HTMLNode("div", None, node_list)
+    return ParentNode("div", node_list)
 
 def block_to_block_type(block):
     block_lines = block.split("\n")
@@ -109,5 +109,5 @@ def olist_block_to_htmlnode(block, block_type):
 def paragraph_block_to_htmlnode(block, block_type):
     paragraph = ' '.join(block.split('\n'))
     children = textnode_to_children(paragraph)
-    return ParentNode("p", block)
+    return ParentNode("p", children)
 
