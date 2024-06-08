@@ -1,6 +1,8 @@
 import re
 from htmlnode import *
 from parentnode import *
+from inline_markdown import *
+from textnode import *
 
 block_type_heading = "heading"
 block_type_code = "code"
@@ -56,6 +58,14 @@ def block_to_block_type(block):
                 return block_type_paragraph
         return block_type_olist
     return block_type_paragraph
+
+def textnode_to_children(text):
+    text_nodes = text_to_textnodes(text)
+    children = []
+    for text_node in text_nodes:
+        children.append(text_note_to_html_node(text_node))
+    return children
+
 
 def heading_block_to_htmlnode(block, block_type):
     heading_tag = f"h{block.count('#')}"
