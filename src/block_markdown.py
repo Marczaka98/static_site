@@ -47,3 +47,11 @@ def code_block_to_htmlnode(block, block_type):
 def quote_block_to_htmlnode(block, block_type):
     block_text = block.replace(">",'')
     return HTMLNode("blockquote", block_text)
+
+def ulist_block_to_htmlnode(block, block_type):
+    block_text = block.replace("* ", '')
+    block_list = block_text.split("\n")
+    line_list = []
+    for line in block_list:
+        line_list.append(HTMLNode("li", line))
+    return HTMLNode("ul", None, line_list)
