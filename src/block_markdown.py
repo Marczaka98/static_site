@@ -43,4 +43,7 @@ def heading_block_to_htmlnode(block, block_type):
 def code_block_to_htmlnode(block, block_type):
     block_text = block.replace("```\n",'').replace("\n```",'')
     return HTMLNode("pre", None, [HTMLNode("code", block_text)])
-    
+
+def quote_block_to_htmlnode(block, block_type):
+    block_text = block.replace(">",'')
+    return HTMLNode("blockquote", block_text)
