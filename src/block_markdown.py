@@ -28,18 +28,24 @@ def markdown_to_html_node(markdown):
         block_type = block_to_block_type(block)
         if block_type == block_type_heading:
             node_list.append(heading_block_to_htmlnode(block, block_type))
+            continue
         if block_type == block_type_code:
             node_list.append(code_block_to_htmlnode(block, block_type))
+            continue
         if block_type == block_type_quote:
             node_list.append(quote_block_to_htmlnode(block, block_type))
+            continue
         if block_type == block_type_ulist:
             node_list.append(ulist_block_to_htmlnode(block, block_type))
+            continue
         if block_type == block_type_olist:
             node_list.append(olist_block_to_htmlnode(block, block_type))
+            continue
         if block_type == block_type_paragraph:
             node_list.append(paragraph_block_to_htmlnode(block, block_type))
+            continue
         else:
-            raise ValueError("Invalid block type")
+            raise ValueError(f"Invalid block type: {block_type}")
     return HTMLNode("div", None, node_list)
 
 def block_to_block_type(block):
@@ -63,39 +69,45 @@ def textnode_to_children(text):
     text_nodes = text_to_textnodes(text)
     children = []
     for text_node in text_nodes:
-        children.append(text_note_to_html_node(text_node))
+        children.append(text_node_to_html_node(text_node))
     return children
-
 
 def heading_block_to_htmlnode(block, block_type):
     heading_tag = f"h{block.count('#')}"
     block_text = re.sub(r"^\#{1,6} ", '', block)
-    return [HTMLNode(heading_tag, block_text)]
+    children = textnode_to_children(block_text)
+    return ParentNode(heading_tag, children)
 
 def code_block_to_htmlnode(block, block_type):
     block_text = block.replace("```\n",'').replace("\n```",'')
-    return [HTMLNode("pre", None, HTMLNode("code", block_text))]
+    children = textnode_to_children(block_text)
+    return ParentNode("pre", [ParentNode("code", children)])
 
 def quote_block_to_htmlnode(block, block_type):
     block_text = block.replace(">",'')
-    return [HTMLNode("blockquote", block_text)]
+    children = textnode_to_children(block_text)
+    return ParentNode("blockquote", children)
 
 def ulist_block_to_htmlnode(block, block_type):
     block_text = block.replace("* ", '')
     block_list = block_text.split("\n")
     line_list = []
     for line in block_list:
-        line_list.append(HTMLNode("li", line))
-    return [HTMLNode("ul", None, line_list)]
+        children = textnode_to_children(line)
+        line_list.append(ParentNode("li", children))
+    return ParentNode("ul", line_list)
 
 def olist_block_to_htmlnode(block, block_type):
     block_list = block.split("\n")
     line_list = []
     for i in range(len(block_list)):
         block_list[i] = block_list[i].replace(f"{i+1}. ", '')
-        line_list.append(HTMLNode("li", block_list[i]))
-    return [HTMLNode("ol", None, line_list)]
+        children = textnode_to_children(block_list[i])
+        line_list.append(ParentNode("li", children))
+    return ParentNode("ol", line_list)
 
 def paragraph_block_to_htmlnode(block, block_type):
-    return [HTMLNode("p", block)]
+    paragraph = ' '.join(block.split('\n'))
+    children = textnode_to_children(paragraph)
+    return ParentNode("p", block)
 
