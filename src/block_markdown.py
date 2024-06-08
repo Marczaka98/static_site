@@ -39,4 +39,8 @@ def heading_block_to_htmlnode(block, block_type):
     heading_tag = f"h{block.count('#')}"
     block_text = re.sub(r"^\#{1,6} ", '', block)
     return(HTMLNode(heading_tag, block_text))
+
+def code_block_to_htmlnode(block, block_type):
+    block_text = block.replace("```\n",'').replace("\n```",'')
+    return HTMLNode("pre", None, [HTMLNode("code", block_text)])
     
