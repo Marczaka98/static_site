@@ -55,3 +55,11 @@ def ulist_block_to_htmlnode(block, block_type):
     for line in block_list:
         line_list.append(HTMLNode("li", line))
     return HTMLNode("ul", None, line_list)
+
+def olist_block_to_htmlnode(block, block_type):
+    block_list = block.split("\n")
+    line_list = []
+    for i in range(len(block_list)):
+        block_list[i] = block_list[i].replace(f"{i+1}. ", '')
+        line_list.append(HTMLNode("li", block_list[i]))
+    return HTMLNode("ol", None, line_list)
