@@ -1,4 +1,4 @@
-from markdown import *
+# from markdown import *
 
 # text = "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and ![another](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png)"
 # print(extract_markdown_images(text))
@@ -20,5 +20,5 @@ from markdown import *
 # )
 # print(split_nodes_link([node]))
 
-text = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
-print(text_to_textnodes(text))
+# text = "This is **text** with an *italic* word and a `code block` and an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://boot.dev)"
+# print(text_to_textnodes(text))
