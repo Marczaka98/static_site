@@ -37,6 +37,31 @@ def extract_markdown_links(text):
 def split_nodes_image(old_nodes):
     new_nodes = []
     for node in old_nodes:
-        image = extract_markdown_images(node.text)
-        word_list = re.split(r"!\[(.*?)\]\((.*?)\)", node.text)
-        return word_list
+        splits = []
+        sections = re.split(r"(!\[.*?\]\(.*?\))", node.text)
+        for i in range(len(sections)):
+            if sections[i] == '':
+                continue
+            if re.findall(r"!\[(.*?)\]\((.*?)\)", sections[i]) != []:
+                image_tup = extract_markdown_images(sections[i])
+                splits.append(TextNode(image_tup[0][0], text_type_image, image_tup[0][1]))
+            else:
+                splits.append(TextNode(sections[i], text_type_text))
+        new_nodes.extend(splits)
+    return new_nodes
+
+def split_nodes_link(old_nodes):
+    new_nodes = []
+    for node in old_nodes:
+        splits = []
+        sections = re.split(r"(\[.*?\]\(.*?\))", node.text)
+        for i in range(len(sections)):
+            if sections[i] == '':
+                continue
+            if re.findall(r"\[(.*?)\]\((.*?)\)", sections[i]) != []:
+                image_tup = extract_markdown_links(sections[i])
+                splits.append(TextNode(image_tup[0][0], text_type_link, image_tup[0][1]))
+            else:
+                splits.append(TextNode(sections[i], text_type_text))
+        new_nodes.extend(splits)
+    return new_nodes
