@@ -63,3 +63,6 @@ def olist_block_to_htmlnode(block, block_type):
         block_list[i] = block_list[i].replace(f"{i+1}. ", '')
         line_list.append(HTMLNode("li", block_list[i]))
     return HTMLNode("ol", None, line_list)
+
+def paragraph_block_to_htmlnode(block, block_type):
+    return HTMLNode("p", block)
