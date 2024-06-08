@@ -4,14 +4,15 @@ import shutil
 from block_markdown import *
 
 def main():
-    markdown_path = "/home/austin/Workspace/github.com/Marczaka98/static_site/content/index.md"
+    content_path = "/home/austin/Workspace/github.com/Marczaka98/static_site/content"
     template_path = "/home/austin/Workspace/github.com/Marczaka98/static_site/template.html"
     source = "/home/austin/Workspace/github.com/Marczaka98/static_site/static"
     destination = "/home/austin/Workspace/github.com/Marczaka98/static_site/public"
     if os.path.exists(destination):
         shutil.rmtree(destination)
     copy_directory(source, destination)
-    generate_page(markdown_path, template_path, destination)
+    # generate_page(markdown_path, template_path, destination)
+    generate_pages_recursive(content_path, template_path, destination)
 
 def copy_directory(source, destination):
     if not os.path.exists(source):
@@ -43,7 +44,21 @@ def generate_page(from_path, template_path, dest_path):
     html_file = markdown_to_html_node(markdown_doc).to_html()
     title = extract_title(markdown_doc)
     updated_template = template_doc.replace("{{ Title }}", title).replace("{{ Content }}", html_file)
-    with open(f"{dest_path}/index.html", 'w') as file:
+    with open(dest_path, 'w') as file:
         file.write(updated_template)
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    if not os.path.exists(dir_path_content):
+        print(f"Content directory '{dir_path_content}' does not exist.")
+    for item in os.listdir(dir_path_content):
+        current_path = os.path.join(dir_path_content, item)
+        current_dest_path = os.path.join(dest_dir_path, item)
+        if os.path.isdir(current_path):
+            if not os.path.exists(current_dest_path):
+                os.mkdir(current_dest_path)
+            generate_pages_recursive(current_path, template_path, current_dest_path)
+        if item.endswith('.md'):
+            current_dest_path = current_dest_path.replace(".md", ".html")
+            generate_page(current_path, template_path, current_dest_path)
 
 main()
