@@ -1,5 +1,6 @@
 import re
 from htmlnode import *
+from parentnode import *
 
 block_type_heading = "heading"
 block_type_code = "code"
@@ -17,6 +18,27 @@ def markdown_to_blocks(markdown):
         block = block.strip()
         filtered_list.append(block)
     return filtered_list
+
+def markdown_to_html_node(markdown):
+    block_list = markdown_to_blocks(markdown)
+    node_list = []
+    for block in block_list:
+        block_type = block_to_block_type(block)
+        if block_type == block_type_heading:
+            node_list.append(heading_block_to_htmlnode(block, block_type))
+        if block_type == block_type_code:
+            node_list.append(code_block_to_htmlnode(block, block_type))
+        if block_type == block_type_quote:
+            node_list.append(quote_block_to_htmlnode(block, block_type))
+        if block_type == block_type_ulist:
+            node_list.append(ulist_block_to_htmlnode(block, block_type))
+        if block_type == block_type_olist:
+            node_list.append(olist_block_to_htmlnode(block, block_type))
+        if block_type == block_type_paragraph:
+            node_list.append(paragraph_block_to_htmlnode(block, block_type))
+        else:
+            raise ValueError("Invalid block type")
+    return HTMLNode("div", None, node_list)
 
 def block_to_block_type(block):
     block_lines = block.split("\n")
@@ -67,21 +89,3 @@ def olist_block_to_htmlnode(block, block_type):
 def paragraph_block_to_htmlnode(block, block_type):
     return [HTMLNode("p", block)]
 
-def markdown_to_html_node(markdown):
-    block_list = markdown_to_blocks(markdown)
-    node_list = []
-    for block in block_list:
-        block_type = block_to_block_type(block)
-        if block_type == block_type_heading:
-            node_list.append(heading_block_to_htmlnode(block, block_type))
-        if block_type == block_type_code:
-            node_list.append(code_block_to_htmlnode(block, block_type))
-        if block_type == block_type_quote:
-            node_list.append(quote_block_to_htmlnode(block, block_type))
-        if block_type == block_type_ulist:
-            node_list.append(ulist_block_to_htmlnode(block, block_type))
-        if block_type == block_type_olist:
-            node_list.append(olist_block_to_htmlnode(block, block_type))
-        if block_type == block_type_paragraph:
-            node_list.append(paragraph_block_to_htmlnode(block, block_type))
-    return HTMLNode("div", None, node_list)
